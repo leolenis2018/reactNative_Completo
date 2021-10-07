@@ -10,48 +10,43 @@ import {
   Picker,
   Switch,
   CheckBox,
-  ImageBackground,
+  ImageBackground, Alert
 } from "react-native";
 
 export default function App() {
-  const [valorPrestamo, setValorPrestamo] = useState();
-  const [tipoPrestamo, setTipoPrestamo] = useState("");
-  const [numeroCuotas, setNumeroCuotas] = useState();
-  const [cuota, setCuota] = useState();
-  const [deuda, setDeuda] = useState();
 
-  let dinero = parseInt(valorPrestamo);
-  let numero_Cuotas = parseInt(numeroCuotas);
+  const [valorPrestamo, setValorPrestamo] = useState('');
+  const [tipoPrestamo, setTipoPrestamo] = useState('Vivienda');
+  const [numeroCuotas, setNumeroCuotas] = useState("");
+  const [cuota, setCuota] = useState("");
+  const [deuda, setDeuda] = useState("");
 
   const Calcular = () => {
-    if (dinero < 4000000 || dinero > 100000000) {
-      alert ("El valor del préstamo debe ser entre 4.000.000 y 100.000.000");
-    } else 
-    if (numero_Cuotas < 12 || numero_Cuotas > 60) {
-      alert("El numero de cuotas debe de estar entre 12 y 60");
-    } else 
-    if (tipoPrestamo != "Vivienda" && tipoPrestamo != "Educacion" && tipoPrestamo!="Automovil" && tipoPrestamo!= "Libre") {
-      alert("Escoger el tipo de prestamo");
+    if (valorPrestamo < 4000000 || valorPrestamo > 100000000) {
+      alert("El valor del préstamo debe ser entre 4.000.000 y 100.000.000");
+    }
+    if (numeroCuotas < 12 || numeroCuotas > 60) {
+      alert("El numero de cuotas debe estar entre 12 y 60");
     } else {
       switch (tipoPrestamo) {
         case "Vivienda":
-          setDeuda(dinero * 0.005 * numero_Cuotas + dinero);
-          setCuota((dinero * 0.005 * numero_Cuotas + dinero) / numero_Cuotas);
+          setCuota(((valorPrestamo * 0.005 * numeroCuotas) + parseInt(valorPrestamo)) / numeroCuotas);
+          setDeuda((valorPrestamo * 0.005 * numeroCuotas) + parseInt(valorPrestamo));
           break;
 
         case "Educacion":
-          setDeuda(dinero * 0.008 * numero_Cuotas + dinero);
-          setCuota((dinero * 0.008 * numero_Cuotas + dinero) / numero_Cuotas);
+          setCuota(((valorPrestamo * 0.008 * numeroCuotas) + parseInt(valorPrestamo)) / numeroCuotas);
+          setDeuda((valorPrestamo * 0.008 * numeroCuotas) + parseInt(valorPrestamo));
           break;
 
         case "Automovil":
-          setDeuda(dinero * 0.015 * numero_Cuotas + dinero);
-          setCuota((dinero * 0.015 * numero_Cuotas + dinero) / numero_Cuotas);
+          setCuota(((valorPrestamo * 0.015 * numeroCuotas) + parseInt(valorPrestamo)) / numeroCuotas);
+          setDeuda((valorPrestamo * 0.015 * numeroCuotas) + parseInt(valorPrestamo));
           break;
 
         case "Libre":
-          setDeuda(dinero * 0.02 * numero_Cuotas + dinero);
-          setCuota((dinero * 0.02 * numero_Cuotas + dinero) / numero_Cuotas);
+          setCuota(((valorPrestamo * 0.02 * numeroCuotas) + parseInt(valorPrestamo)) / numeroCuotas);
+          setDeuda((valorPrestamo * 0.02 * numeroCuotas) + parseInt(valorPrestamo));
           break;
       }
     }
@@ -70,7 +65,7 @@ export default function App() {
       <Image
         source={require("./img/bank.jpg")}
         style={{
-          
+
           width: 150,
           height: 150,
           borderRadius: 10,
@@ -82,20 +77,21 @@ export default function App() {
 
       <Text style={styles.title}> Simula tu Crédito</Text>
       <View>
-        <Text style={styles.options}>Valor del prestamo</Text>
+        <Text style={styles.options}>Valor del préstamo</Text>
         <TextInput
           style={styles.inputs}
           onChangeText={setValorPrestamo}
+          onValueChange={(itemValue) => setValorPrestamo(itemValue)}
           value={valorPrestamo}
         ></TextInput>
 
-        <Text style={styles.options}>Tipo del prestamo</Text>
+        <Text style={styles.options}>Seleccione el tipo de préstamo</Text>
         <Picker
           style={styles.inputs}
           selectedValue={tipoPrestamo}
           onValueChange={(itemValue) => setTipoPrestamo(itemValue)}
         >
-          <Picker.Item label="" value="" />
+
           <Picker.Item label="Vivienda" value="Vivienda" />
           <Picker.Item label="Educación" value="Educacion" />
           <Picker.Item label="Automóvil" value="Automovil" />
@@ -115,16 +111,14 @@ export default function App() {
         <Text style={styles.options}>Total Deuda:</Text>
         <TextInput style={styles.inputs} value={deuda}></TextInput>
       </View>
-      <View
-        style={styles.button}
-        style={{ flexDirection: "row" }}
-      >
-        <Button title="Calcular" onPress={Calcular}></Button>
-        <Text>{"\n"}</Text>
-        <Button title="Limpiar" onPress={Limpiar}>
-          Limpiar
-        </Button>
+
+      <View style={{flexDirection: "row", marginBottom:25}}>
+        <Button title= "Calcular" onPress={Calcular}/>
+        <Button title= "Limpiar" onPress={Limpiar}/>
+
       </View>
+
+  
       <StatusBar style="auto" />
     </View>
   );
@@ -132,18 +126,23 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:15,
+    marginTop: 15,
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
+  },
+
+  button: {
+
+    backgroundColor: "orange"
   },
 
   title: {
-    fontSize: 45,
+    fontSize: 35,
     fontWeight: 10,
     fontFamily: "Neucha",
-    color: "orange",
+    color: "orange"
   },
 
   options: {
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     color: "green",
     fontWeight: 10,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
 
   inputs: {
@@ -159,22 +158,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     color: "black",
-    height: 40,
+    height: 40
   },
 
-  button: {
-    height: 50,
-    width: 20,
-    marginTop: 20,
-    marginLeft: 15,
-  },
 
   footer: {
     marginTop: 40,
-    display: "block",
+    display: "block"
   },
 
   error: {
-    color: "red",
+    color: "red"
   },
 });
